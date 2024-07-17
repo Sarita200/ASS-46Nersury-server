@@ -190,6 +190,11 @@ app.delete("/plant/:id",(req,res) =>{
         data :null
     })
 })
+
+app.use(" * ",(req,res)=>{
+    res.send(`<div>
+        <h1 style="text-align:center">404 Not Found</h1>`)
+})
 const PORT = process.env.PORT ;
 
 app.listen(PORT, () => {
