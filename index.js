@@ -31,12 +31,14 @@ const plants = [{
 }
 ]
 
-app.get("/health",(req,res) =>{
+function getHealth(req,res){
     res.json({
         success :true,
-        message :"Server is running"
+        message :"Server is running....."
     })
-})
+}
+
+app.get("/health",getHealth)
 
 app.post("/plant", (req, res) => {
     const {
