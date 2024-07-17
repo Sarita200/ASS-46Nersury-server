@@ -13,7 +13,7 @@ const PORT = process.env.PORT ;
 app.use(express.json());
 
 (async()=>{
-    const conn = await mongoose.connect("mongodb+srv://sarita1:phphatsdfg@cluster0.07emoys.mongodb.net/Nursery-server")
+    const conn = await mongoose.connect(process.env.MONGO_URL)
 
     if(conn){
         console.log(`MongoDB Connected 📦`)
