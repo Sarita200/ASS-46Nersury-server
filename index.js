@@ -102,8 +102,6 @@ app.get("/plants",(req,res) =>{
     })
 })
 
-
-
 app.get("/plant/:id", (req,res)=>{
     const {id} = req.params
 
@@ -162,6 +160,33 @@ app.put("/plant/:id",(req,res) =>{
      }
 
      
+})
+
+app.delete("/plant/:id",(req,res) =>{
+    const {id} = req.params
+
+    let index =-1
+
+    plants.forEach((plant , i) =>{
+        if(plant.id == id){
+            index = i
+        }
+    })
+
+    if(index == -1){
+        return res.json({
+            success : true,
+            message :`plant not found with id ${id}` 
+        })
+    }
+
+    plants.splice(index, 1)
+
+    res.json({
+        success : true,
+        message :"plant deleted successfully",
+        data :null
+    })
 })
 const PORT = 5000;
 
