@@ -1,5 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
+
+import { getHealth } from "./controllers/health.js";
+import { postPlant,getPlant,getPlantID,putPlantID,deletePlantID } from "./controllers/plants.js";
+
 dotenv.config()
 const app = express();
 app.use(express.json());
@@ -31,174 +35,19 @@ const plants = [{
 }
 ]
 
-const getHealth =(req,res)=>{
-    res.json({
-        success :true,
-        message :"Server is running....."
-    })
-}
+
 
 app.get("/health",getHealth)
 
-app.post("/plant", (req, res) => {
-    const {
-        name,
-        category,
-        image,
-        price,
-        description 
-    } = req.body
+app.post("/plant", postPlant)
 
-        if(!name ){
-            return res.json({
-                success :false,
-                data :null,
-                message :"Name is required......"
-            })
-        }
-        if(!category){
-            return res.json({
-                success :false,
-                data :null,
-                message :"category is required......"
-            })
-        }
-        if(!image){
-            return res.json({
-                success :false,
-                data :null,
-                message :"image is required......"
-            })
-        }
-        if(!price){
-            return res.json({
-                success :false,
-                data :null,
-                message :"price is required......"
-            })
-        }
-        if(!description){
-            return res.json({
-                success :false,
-                data :null,
-                message :"description is required......"
-            })
-        }
+app.get("/plants",getPlant)
 
-    const randomId = Math.round(Math.random() * 10000)
+app.get("/plant/:id",getPlantID)
 
-    const newPlant = {
-        id: randomId,
-        name: name ,
-        category: category,
-        image: image,
-        price: price,
-        description: description
-    }
+app.put("/plant/:id",putPlantID)
 
-    plants.push(newPlant)
-
-    res.json({
-        succes: true,
-        data: newPlant,
-        message: "New plant Added succesfully",
-    })
-})
-
-app.get("/plants",(req,res) =>{
-    res.json({
-        success :true,
-        data :plants,
-        message :"All plants fetch successfully"
-    })
-})
-
-app.get("/plant/:id", (req,res)=>{
-    const {id} = req.params
-
-    const plant = plants.find((p)=> p.id == id)
-
-    res.json({
-        success :plant ? true : false ,
-        data :plant,
-        message :plant ? "plant fetch successfully":" plant can not fetch "
-    })
-})
-
-app.put("/plant/:id",(req,res) =>{
-    const {
-        name,
-        category,
-        image,
-        price,
-        description 
-    } = req.body
-
-     const {id}=req.params
-     
-     let index = -1
-     plants.forEach((plant,i)=>{
-         if(plant.id==id ){
-            index = i
-         }
-     })
-
-     
-     const newObj ={
-        id,
-        name,
-        category,
-        image,
-        price,
-        description 
-
-     }
-     if(index == 1){
-        return res.json({
-            success :false,
-            message :`Plant not found for id ${id}`,
-            data :null
-        })
-     }
-     else{
-        plants[index] =newObj 
-
-        return res.json({
-            success :true,
-            message : "Plant updated successfully",
-            data :newObj
-        })
-     }
-
-     
-})
-
-app.delete("/plant/:id",(req,res) =>{
-    const {id} = req.params
-
-    let index =-1
-
-    plants.forEach((plant , i) =>{
-        if(plant.id == id){
-            index = i
-        }
-    })
-
-    if(index == -1){
-        return res.json({
-            success : true,
-            message :`plant not found with id ${id}` 
-        })
-    }
-
-    plants.splice(index, 1)
-
-    res.json({
-        success : true,
-        message :"plant deleted successfully",
-        data :null
-    })
-})
+app.delete("/plant/:id",deletePlantID)
 
 app.use("*",(req,res)=>{
     res.send(`<div>
