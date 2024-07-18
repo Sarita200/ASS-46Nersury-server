@@ -38,10 +38,10 @@ const getPlant =async (req,res) =>{
     })
 }
 
-const getPlantID =  (req,res)=>{
+const getPlantID =  async (req,res)=>{
     const {id} = req.params
 
-    const plant = plants.find((p)=> p.id == id)
+    const plant = await Plant.findOne({_id :id})
 
     res.json({
         success :plant ? true : false ,
@@ -50,7 +50,7 @@ const getPlantID =  (req,res)=>{
     })
 }
 
-const putPlantID = (req,res) =>{
+const putPlantID = async (req,res) =>{
     const {
         name,
         category,
@@ -61,62 +61,33 @@ const putPlantID = (req,res) =>{
 
      const {id}=req.params
      
-     let index = -1
-     plants.forEach((plant,i)=>{
-         if(plant.id==id ){
-            index = i
-         }
-     })
-
-     
-     const newObj ={
-        id,
-        name,
-        category,
-        image,
-        price,
-        description 
-
-     }
-     if(index == 1){
-        return res.json({
-            success :false,
-            message :`Plant not found for id ${id}`,
-            data :null
+     await Plant.updateOne({_id:id},
+        {
+            $set :{
+                name :name,
+                category:category,
+                image:image,
+                price :price,
+                description:description
+            }
         })
-     }
-     else{
-        plants[index] =newObj 
 
-        return res.json({
+        const updatedPlant = await Plant.findById(id)
+
+        res.json({
             success :true,
-            message : "Plant updated successfully",
-            data :newObj
+            message : "Plant updated Successfully",
+            data :updatedPlant
         })
-     }
-
      
 }
 
-const deletePlantID =(req,res) =>{
+const deletePlantID =async (req,res) =>{
     const {id} = req.params
 
-    let index =-1
-
-    plants.forEach((plant , i) =>{
-        if(plant.id == id){
-            index = i
-        }
+    await Plant.deleteOne({
+        _id :id
     })
-
-    if(index == -1){
-        return res.json({
-            success : true,
-            message :`plant not found with id ${id}` 
-        })
-    }
-
-    plants.splice(index, 1)
 
     res.json({
         success : true,
