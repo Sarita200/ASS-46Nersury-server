@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import cors from  "cors"
 
 import { getHealth } from "./controllers/health.js";
 import { postPlant,getPlant,getPlantID,putPlantID,deletePlantID } from "./controllers/plants.js";
@@ -10,6 +11,7 @@ dotenv.config()
 const app = express();
 
 const PORT = process.env.PORT ;
+app.use(cors())
 app.use(express.json());
 
 (async()=>{
