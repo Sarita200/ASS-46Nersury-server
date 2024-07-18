@@ -1,6 +1,4 @@
 import Plant from "./../models/Plant.js"
-const plants = []
-
 
 const postPlant = async (req, res) => {
     const {
@@ -23,7 +21,7 @@ const postPlant = async (req, res) => {
 
     res.json({
         succes: true,
-        data: newPlant,
+        data: savePlant,
         message: "New plant Added succesfully",
     })
 }
